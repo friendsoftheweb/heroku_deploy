@@ -17,12 +17,12 @@ remote=$1
 
 remote_url=$(git remote get-url $remote)
 
-if [[ ! $remote_url == "https://git.heroku.com/"* ]]; then
+if [[ ! ( $remote_url == "https://git.heroku.com/"* || $remote_url == "git@heroku.com:"* ) ]]; then
   echo "  Remote does not look like a heroku url: $remote_url"
   exit 1
 fi
 
-heroku_app=$(basename "$remote_url" | sed 's/\.[^.]*$//')
+heroku_app=$(sed -e 's#.*[:/]\(\)#\1#' <<< "$remote_url" | sed 's/\.[^.]*$//')
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
