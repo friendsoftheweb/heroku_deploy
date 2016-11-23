@@ -42,7 +42,7 @@ if [[ $(git status --porcelain --untracked-files=no -- | wc -l | tr -d " ") != '
 fi
 
 # Guard pushed to origin
-if [[ $(git diff $current_branch...$current_branch@\{upstream\} -- | wc -l) -ne 0 ]] ; then
+if [[ $(git log origin/$current_branch...$current_branch -- | wc -l) -ne 0 ]] ; then
   read -p "  Local $current_branch does not match upstream, proceed anyway? (y/N) " -n 1 -r
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
