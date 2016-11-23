@@ -6,20 +6,23 @@
 #  * with checks to see if migrations need to be run, runs them if so.
 #  * Some other sanity checks in there with y/n prompts.
 #
-# It needs to know heroku app names, app names for production and staging
-# remotes are built-in.
 #
+# First arg is git remote name.
 #
-#      deploy # deploys to production, will refuse to deploy any brnach
+# If git remote name is "production", it will refuse to deploy any branch but master.
 #
-#      deploy staging # need a heroku remote called staging
-#
-#      deploy git_remote heroku_app_name
-
 set -e
 
 remote=$1
-heroku_app=$2
+
+remote_url=$(git remote get-url $remote)
+
+if [[ ! $remote_url == "https://git.heroku.com/"* ]]; then
+  echo "  Remote does not look like a heroku url: $remote_url"
+  exit 1
+fi
+
+heroku_app=$(basename "$remote_url" | sed 's/\.[^.]*$//')
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
