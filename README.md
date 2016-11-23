@@ -1,41 +1,48 @@
 # HerokuDeploy
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/heroku_deploy`. To experiment with that code, run `bin/console` for an interactive prompt.
+Logic to deploy to heroku in the FTW way.
 
-TODO: Delete this and the text above, and describe your gem
+It's a bit hacky and def doesn't take care of all edge cases and possible
+error conditions, but the first step is getting it in a gem so diff
+projects can share it, so we can make improvements worthwhile.
 
-## Installation
+* checks to see if migrations need to be run, runs them if so, with maintenance
+  mode and restart.
+* Tries some other sanity checks, including try to ensure your code has been
+  pushed to origin before you can deploy it to heroku.
 
-Add this line to your application's Gemfile:
+1. Add the gem to Gemfile
 
-```ruby
-gem 'heroku_deploy'
-```
+        group :development do
+           gem 'heroku_deploy', git: "git@github.com:friendsoftheweb/heroku_deploy.git"
+        end
 
-And then execute:
+2. Add task to your `Rakefile`
 
-    $ bundle
+        HerokuDeploy::Task.new
 
-Or install it yourself as:
+    We've done it this way cause anticipate in the future diff
+    apps might have different config params, and this is one way to
+    provide for that.
 
-    $ gem install heroku_deploy
+3. Make sure you have a heroku remote in your git checkout
 
-## Usage
+4. Call the rake task with remote name:
 
-TODO: Write usage instructions here
+        ./bin/rake heroku_deploy[remote_name]
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/heroku_deploy.
+   If you use the name `production` for your remote, then
+   the script will not let you push any branch but `master` to it.
 
 
-## License
+### to do ideas
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+* Rewrite all that bash in plain ruby to be less hairy?
+
+* Should this be in the gemfile or at all, or just a generic
+  utility you have installed on your machine? What if it needs
+  project-specific config? Look in current directory for a `.deploy-config`
+  file or something?  Would it be bad that an app can't insist on
+  a certain version, or good that you update on your machine
+  once and get new version for all your projects?
 
