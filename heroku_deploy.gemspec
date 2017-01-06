@@ -1,22 +1,22 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'heroku_deploy/version'
+require "heroku_deploy/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "heroku_deploy"
   spec.version       = HerokuDeploy::VERSION
   spec.authors       = ["Friends of the Web"]
-  spec.email         = ["infon@friendsoftheweb.com"]
+  spec.email         = ["info@friendsoftheweb.com"]
 
   spec.summary       = %q{heroku deployment the way FTW wants it}
   spec.homepage      = "http://github.com/friendsoftheweb/heroku_deploy"
   spec.license       = "MIT"
 
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
+  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "http://nosuchhost"
+    spec.metadata["allowed_push_host"] = "http://nosuchhost"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
