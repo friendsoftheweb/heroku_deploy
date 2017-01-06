@@ -1,4 +1,4 @@
-require 'pp'
+require "pp"
 
 module HerokuDeploy
   class Task
@@ -20,9 +20,9 @@ module HerokuDeploy
           exit 1
         end
 
-        system_call = [HerokuDeploy::DEPLOY_SCRIPT_PATH, remote_name, '2>&1']
+        system_call = [HerokuDeploy::DEPLOY_SCRIPT_PATH, remote_name, "2>&1"]
 
-        $stderr.puts system_call.join(' ')
+        $stderr.puts system_call.join(" ")
 
         success = system *system_call
 
