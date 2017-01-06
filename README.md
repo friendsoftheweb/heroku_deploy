@@ -17,7 +17,7 @@ projects can share it, so we can make improvements worthwhile.
            gem 'heroku_deploy', git: "git@github.com:friendsoftheweb/heroku_deploy.git"
         end
 
-2. Add task to your `Rakefile`
+2. Add task to your `Rakefile` if you are not using Rails.
 
         HerokuDeploy::Task.new
 
