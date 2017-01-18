@@ -9,13 +9,32 @@
 #
 # First arg is git remote name.
 #
+# --extra_migration_arguments=-s performance-l or other extra arguments you want to `heroku run rake db:migrate`
+#
 # If git remote name is "production", it will refuse to deploy any branch but master.
 #
 set -e
 
-remote=$1
 
+remote=$1
+extra_migration_arguments=""
 remote_url=$(git remote get-url $remote)
+
+
+# Parse Options
+for i in "$@"
+do
+case $i in
+    --extra-migration-arguments=*)
+    extra_migration_arguments="${i#*=}"
+    shift # past argument=value
+    ;;
+    *)
+    # unknown option
+    ;;
+esac
+done
+
 
 if [[ ! ( $remote_url == "https://git.heroku.com/"* || $remote_url == "git@heroku.com:"* ) ]]; then
   echo "  Remote does not look like a heroku url: $remote_url"
@@ -72,7 +91,7 @@ if git remote | grep -q $remote; then
     echo "  Migrations detected, deploying, enabling maintenance, restarting, and disabling maintenance..."
     git_push
     heroku maintenance:on -a $heroku_app
-    if [[ $(heroku run rake db:migrate -x -s performance-l -a $heroku_app) ]] ; then
+    if heroku run rake db:migrate -x $extra_migration_arguments -a $heroku_app ; then
       sleep 4 # Wait a moment before restarting to prevent the "Could not restart error"
       heroku restart -a $heroku_app
     else
